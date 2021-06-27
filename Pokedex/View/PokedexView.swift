@@ -9,14 +9,18 @@ import SwiftUI
 
 struct PokedexView: View {
 
+    // MARK: - PROPERTIES
     private let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
 
     @ObservedObject var viewModel = PokemonViewModel()
 
+    @State var isShowingDetail: Bool = false
 
+    // MARK: - BODY
     var body: some View {
 
         NavigationView {
+
             ScrollView {
 
                 HStack(spacing: 15) {
@@ -25,7 +29,7 @@ struct PokedexView: View {
                         .foregroundColor(.gray)
 
                     TextField("Search", text: $viewModel.searchQuery)
-                }
+                } //: HStack
 
                 .padding(.vertical, 9)
                 .padding(.horizontal)
@@ -36,14 +40,13 @@ struct PokedexView: View {
                 LazyVGrid(columns: gridItems, spacing: 18) {
                     ForEach(viewModel.pokemons) { pokemon in
                         PokemonCell(pokemon: pokemon)
-                    }
-                }
+                    }  //: ForEach
+                } //: LazyVGrid
                 .padding()
-                //: LazyVGrid
-            }
-            //: Scroll
+            } //: Scroll
             .navigationTitle("Pokedex")
         } //: Nav
+
         .onAppear {
             viewModel.fetchPokemon()
         }

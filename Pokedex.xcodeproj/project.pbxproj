@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18779C9726878611006A1139 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18779C9626878611006A1139 /* PokemonDetailView.swift */; };
+		189196052687E77F00FE271D /* StatsCapsuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189196042687E77F00FE271D /* StatsCapsuleView.swift */; };
 		18FB009B268628700082E469 /* PokedexApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB009A268628700082E469 /* PokedexApp.swift */; };
 		18FB009D268628700082E469 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FB009C268628700082E469 /* ContentView.swift */; };
 		18FB009F268628710082E469 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 18FB009E268628710082E469 /* Assets.xcassets */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		18779C9626878611006A1139 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
+		189196042687E77F00FE271D /* StatsCapsuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsCapsuleView.swift; sourceTree = "<group>"; };
 		18FB0097268628700082E469 /* Pokedex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pokedex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18FB009A268628700082E469 /* PokedexApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokedexApp.swift; sourceTree = "<group>"; };
 		18FB009C268628700082E469 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -95,6 +99,8 @@
 			children = (
 				18FB00AC268629120082E469 /* PokemonCell.swift */,
 				18FB00AE2686491D0082E469 /* PokedexView.swift */,
+				18779C9626878611006A1139 /* PokemonDetailView.swift */,
+				189196042687E77F00FE271D /* StatsCapsuleView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -178,7 +184,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				18FB00B126864DAA0082E469 /* Pokemon.swift in Sources */,
+				18779C9726878611006A1139 /* PokemonDetailView.swift in Sources */,
 				18FB009D268628700082E469 /* ContentView.swift in Sources */,
+				189196052687E77F00FE271D /* StatsCapsuleView.swift in Sources */,
 				18FB00B5268666330082E469 /* Color.swift in Sources */,
 				18FB00B32686501F0082E469 /* PokemonViewModel.swift in Sources */,
 				18FB009B268628700082E469 /* PokedexApp.swift in Sources */,

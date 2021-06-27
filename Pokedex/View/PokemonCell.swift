@@ -13,7 +13,28 @@ struct PokemonCell: View {
 
     @State private var pokemonImage: UIImage?
 
+    @State var isShowingDetail: Bool = false
+
     var body: some View {
+        Button(
+            action: {
+                withAnimation(.easeInOut(duration: 1)) {
+                    isShowingDetail = true
+                }
+            },
+            label: {
+                cellView
+            }
+        )
+        .fullScreenCover(isPresented: $isShowingDetail) {
+            PokemonDetailView(
+                pokemon: pokemon,
+                isShowingDetail: $isShowingDetail
+            )
+        }
+    }
+
+    fileprivate var cellView: some View {
         ZStack {
             VStack(alignment: .leading) {
                 Text(pokemon.name.capitalized)
