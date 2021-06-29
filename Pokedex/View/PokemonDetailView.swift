@@ -9,10 +9,10 @@ import SwiftUI
 
 struct PokemonDetailView: View {
 
+    // MARK: - PROPERTIES
     let pokemon: Pokemon
 
     @Binding var isShowingDetail: Bool
-    @State private var pokemonImage: UIImage?
 
     var body: some View {
         ZStack {
@@ -24,7 +24,7 @@ struct PokemonDetailView: View {
 
                 HStack { Spacer() }.padding(25)
 
-                if let image = pokemonImage {
+                if let image = pokemon.image {
                     Image(uiImage: image)
                         .resizable()
                         .frame(width: 200, height: 200)
@@ -35,15 +35,15 @@ struct PokemonDetailView: View {
                         .frame(width: 200, height: 200)
                 }
                 VStack {
-                    Text(pokemon.name.capitalized)
+                    Text(pokemon.model.name.capitalized)
                         .font(.largeTitle)
                         .padding(.top, 40)
 
-                    Text(pokemon.type.capitalized)
+                    Text(pokemon.model.type.capitalized)
                         .font(.subheadline).bold()
                         .foregroundColor(.white)
                         .padding(.init(top: 8, leading: 24, bottom: 8, trailing: 24))
-                        .background(Color(UIColor.backgroundColor(forType: pokemon.type)))
+                        .background(pokemon.color)
                         .cornerRadius(20)
 
 
@@ -54,7 +54,7 @@ struct PokemonDetailView: View {
 
                     HStack { Spacer() }
 
-                }//: VStack
+                } //: VStack
 
                 .background(Color.white)
                 .cornerRadius(30)
@@ -94,12 +94,6 @@ struct PokemonDetailView: View {
 
         } //: ZStack
 
-        .onAppear {
-            pokemon.fetchImage { image in
-                pokemonImage = image
-            }
-
-        }
     } //: Body
 }
 

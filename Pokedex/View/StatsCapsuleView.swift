@@ -44,16 +44,12 @@ struct CustomChartView: View {
 
     var body: some View {
         VStack {
-            StatsCapsuleView(value: pokemon.height, title: "Height", color: pokemon.color)
-
-            StatsCapsuleView(value: pokemon.weight, title: "Weight", color: pokemon.color)
-
-            StatsCapsuleView(value: pokemon.attack, title: "Attack", color: pokemon.color)
-
-            StatsCapsuleView(value: pokemon.defense, title: "Defense", color: pokemon.color)
-
-
+            StatsCapsuleView(value: pokemon.model.height, title: "Height", color: pokemon.color)
+            StatsCapsuleView(value: pokemon.model.weight, title: "Weight", color: pokemon.color)
+            StatsCapsuleView(value: pokemon.model.attack, title: "Attack", color: pokemon.color)
+            StatsCapsuleView(value: pokemon.model.defense, title: "Defense", color: pokemon.color)
             StatsCapsuleView(value: pokemon.average, title: "Average", color: pokemon.color)
+
         }.padding()
     }
 }

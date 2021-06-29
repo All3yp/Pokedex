@@ -9,9 +9,8 @@ import SwiftUI
 
 struct PokemonCell: View {
 
+    // MARK: - PROPERTIES
     let pokemon: Pokemon
-
-    @State private var pokemonImage: UIImage?
 
     @State var isShowingDetail: Bool = false
 
@@ -37,14 +36,14 @@ struct PokemonCell: View {
     fileprivate var cellView: some View {
         ZStack {
             VStack(alignment: .leading) {
-                Text(pokemon.name.capitalized)
+                Text(pokemon.model.name.capitalized)
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding(.top, 8)
                     .padding(.leading)
 
                 HStack {
-                    Text(pokemon.type)
+                    Text(pokemon.model.type)
                         .font(.subheadline).bold()
                         .foregroundColor(.white)
                         .padding(.horizontal, 10)
@@ -55,7 +54,7 @@ struct PokemonCell: View {
                         )
                         .frame(width: 88, height: 25)
 
-                    if let image = pokemonImage {
+                    if let image = pokemon.image {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
@@ -72,14 +71,9 @@ struct PokemonCell: View {
                 }
             }
         }
-        .background(Color(UIColor.backgroundColor(forType: pokemon.type)))
+        .background(pokemon.color)
         .cornerRadius(12)
-        .shadow(color: Color(UIColor.backgroundColor(forType: pokemon.type)), radius: 5, x: 0.0, y: 0.0)
-        .onAppear {
-            pokemon.fetchImage { image in
-                pokemonImage = image
-            }
-        }
+        .shadow(color: pokemon.color, radius: 5, x: 0.0, y: 0.0)
     }
 }
 

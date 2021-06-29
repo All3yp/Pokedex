@@ -6,60 +6,83 @@
 //
 
 import SwiftUI
+import CoreData
 
 class PokemonViewModel: ObservableObject {
 
-    let baseURL = "https://pokedex-bb36f.firebaseio.com/pokemon.json"
-
-    private var allFetchedPokemons: [Pokemon] = []
-
+    // MARK: - PROPERTIES
     @Published var pokemons = [Pokemon]()
-
     @Published var searchQuery = "" {
         willSet {
-            pokemons = (newValue.isEmpty) ? allFetchedPokemons : self.filteredPokemons(newValue)
+            pokemons = (newValue.isEmpty) ? persistedPokemons.pokemons : self.filteredPokemons(newValue)
         }
     }
 
-    func fetchPokemon() {
-        guard let url = URL(string: baseURL) else { return }
+    private var persistedPokemons: (pokemons: [Pokemon], entities: [PokemonsEntity]) {
+        let entities = CoreDataPokemonHelper.readPokemonsFromCoreData()
+        return (
+            pokemons: entities.compactMap { Pokemon(entity: $0) },
+            entities: entities
+        )
+    }
 
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data?.parseData(removeString: "null,") else {
-                return
-            }
+    // MARK: - Request Pokemons
+    func fetchPokemons() {
+        
+        if !persistedPokemons.entities.isEmpty {
 
-            do {
-                let pokemons = try JSONDecoder().decode([Pokemon].self, from: data)
+            pokemons = persistedPokemons.pokemons
+            downloadImagesIfNeeded()
 
-                DispatchQueue.main.async {
-                    self.allFetchedPokemons = pokemons
-                    self.pokemons = pokemons
-                    print(pokemons.count)
+        } else {
+
+            Networking.loadFromAPI { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+
+                case .success(let pokemons):
+
+                    for pokemon in pokemons {
+                        CoreDataPokemonHelper.saveToCoreData(pokemon: pokemon)
+                    }
+
+                    self.downloadImagesIfNeeded()
+
+                    self.reloadPokemonsFromCoreData()
+
+                case .failure(let error):
+                    print(error)
                 }
-
-            } catch {
-                print(error)
-                return
             }
 
-        }.resume()
+        }
+
     }
 
-    func filteredPokemons(_ filterTerm: String) -> [Pokemon] {
-        return allFetchedPokemons.filter { pokemon in
-            return pokemon.name.lowercased().contains(filterTerm.lowercased())
+    private func filteredPokemons(_ filterTerm: String) -> [Pokemon] {
+        return persistedPokemons.pokemons.filter { pokemon in
+            return pokemon.model.name.lowercased().contains(filterTerm.lowercased())
         }
     }
-}
 
-extension Data {
-    func parseData(removeString string: String) -> Data? {
-        let dataAsString = String(data: self, encoding: .utf8)
-        let parsedDataString = dataAsString?.replacingOccurrences(of: string, with: "")
-        guard let data = parsedDataString?.data(using: .utf8) else {
-            return nil
+    private func reloadPokemonsFromCoreData() {
+        DispatchQueue.main.async {
+            self.pokemons = self.persistedPokemons.pokemons
         }
-        return data
     }
+
+    private func downloadImagesIfNeeded() {
+        let pokemonsWithoutPersistedImages: [PokemonsEntity] = persistedPokemons.entities.filter { $0.imageData == nil }
+
+        pokemonsWithoutPersistedImages.forEach { entity in
+            Networking.fetchImage(imageUrl: entity.imageURL!) { [weak self] data in
+
+                CoreDataPokemonHelper.updateToCoreData(imageData: data, entity: entity)
+
+                //recarrega lista de pokemons que aparece na tela
+                self?.reloadPokemonsFromCoreData()
+            }
+        }
+    }
+
 }

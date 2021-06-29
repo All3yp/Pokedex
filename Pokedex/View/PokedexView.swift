@@ -12,7 +12,7 @@ struct PokedexView: View {
     // MARK: - PROPERTIES
     private let gridItems = [GridItem(.flexible()), GridItem(.flexible())]
 
-    @ObservedObject var viewModel = PokemonViewModel()
+    @ObservedObject var viewModel: PokemonViewModel = PokemonViewModel()
 
     @State var isShowingDetail: Bool = false
 
@@ -38,7 +38,7 @@ struct PokedexView: View {
                 .padding()
 
                 LazyVGrid(columns: gridItems, spacing: 18) {
-                    ForEach(viewModel.pokemons) { pokemon in
+                    ForEach(viewModel.pokemons, id: \.model.id) { pokemon in
                         PokemonCell(pokemon: pokemon)
                     }  //: ForEach
                 } //: LazyVGrid
@@ -48,8 +48,9 @@ struct PokedexView: View {
         } //: Nav
 
         .onAppear {
-            viewModel.fetchPokemon()
+            viewModel.fetchPokemons()
         }
+
     }
 }
 
